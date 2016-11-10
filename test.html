@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<!--Tested with Firefox browser only--> 
+
+<html>
+
+<head>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>  <!--jquery plugin loaded from Google source-->
+</head>
+
+<body>
+ 
+  <input type="button" value="Display" class="button" />                                   <!--Button to run the below script-->
+  <br />
+  
+  <p><b> Male: </b></p>
+  <p id="Male"></p>                         <!--Where the male array is outputed to-->
+  
+  <p><b> Female: </b></p>
+  <p id="Female"></p>                       <!--Where the female array is outputed to-->
+  
+
+  <script>
+   $(document).ready(function() {
+    $('.button').click(function(){
+     $.getJSON("jsonfile.json", function(data){  <!--Couldn't get it working from the site, couldn't work out how to fix the cross-origin request block, so I used a local file instead-->
+      $.each(data, function (index, value) {
+      console.log(value);                        <!--Displays the json content in the console, just so its easy to check if it has work worked-->
+	  
+	  data[2].pets = 0;                          <!--Poor way to get around the NULL errors in the for loops caused by this. Couldnt figure out how to catch the error or check for null and avoid-->
+	  
+      var i = 0;                                 <!--Defining variables and arrays needed-->
+	  var j = 0;
+	  var maleArray = [];
+	  var femaleArray = [];
+	  
+	  for(i = 0; i < data.length; i++){                     <!--Loop to run for how many people objects they are in the json file-->
+	    if (data[i].gender == "Male")                       <!--Passes if the owner is Male, does nothing if they are female-->
+		{
+		  for(j = 0; j < data[i].pets.length; j++){         <!--Loop to run for how many pet objects are in the current owner object-->
+		    if (data[i].pets[j].type == "Cat"){             <!--Passes if the pet is a cat, does nothing if they aren't-->
+			  maleArray.push(data[i].pets[j].name);         <!--Pushes the current pets name into the Male Array-->
+			}
+			else {}
+		  }
+		 
+		}
+		else {}
+       }
+	   
+	   for(i = 0; i < data.length; i++){                   <!--Loop to run for how many people objects they are in the json file-->
+	    if (data[i].gender == "Female")                    <!--Passes if the owner is Female, does nothing if they are Male-->
+		{
+		  for(j = 0; j < data[i].pets.length; j++){        <!--Loop to run for how many pet objects are in the current owner object-->
+		    if (data[i].pets[j].type == "Cat"){            <!--Passes if the pet is a cat, does nothing if they aren't-->
+			  femaleArray.push(data[i].pets[j].name);      <!--Pushes the current pets name into the Female Array-->
+			}
+			else {}
+		  }
+		 
+		}
+		else {}
+       }
+      
+	  maleArray.sort();                                             <!--Sort the arrays in alphabetical order-->
+	  maleArray.sort();
+	  
+	  document.getElementById("Male").innerHTML = maleArray;        <!--Output the arrays to the 'Male' and 'Female' elements above-->
+	  document.getElementById("Female").innerHTML = femaleArray;
+	  
+   });
+  });
+ });
+});
+     
+	
+	</script>
+	
+	
+	
+
+</body>
+
+</html>
+
